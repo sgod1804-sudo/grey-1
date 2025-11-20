@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -271,16 +270,6 @@
             margin-top: 15px;
             text-align: center;
         }
-
-        .error-message {
-            display: none;
-            background: #ffd4d4;
-            color: #501616;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            text-align: center;
-        }
         
         @media (max-width: 1200px) {
             .courses-grid {
@@ -431,10 +420,6 @@
                 <div class="loading" id="loading">
                     Перенаправляем к оплате...
                 </div>
-                
-                <div class="success-message" id="successMessage">
-                    ✅ Перенаправляем к оплате...
-                </div>
             </form>
         </div>
     </div>
@@ -455,7 +440,6 @@
             // Сброс формы
             document.getElementById('orderForm').reset();
             document.getElementById('loading').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'none';
             document.getElementById('submitButton').disabled = false;
             
             document.getElementById('orderModal').style.display = 'flex';
@@ -471,12 +455,10 @@
             
             const submitButton = document.getElementById('submitButton');
             const loading = document.getElementById('loading');
-            const successMessage = document.getElementById('successMessage');
             
             // Показываем загрузку
             submitButton.disabled = true;
             loading.style.display = 'block';
-            successMessage.style.display = 'none';
             
             // Собираем данные формы
             const formData = {
@@ -499,15 +481,15 @@
             console.log('Цена:', formData.price);
             console.log('Дата:', formData.timestamp);
             
-            // Успешное сообщение
-            loading.style.display = 'none';
-            successMessage.style.display = 'block';
+            // НЕМЕДЛЕННО открываем Monobank (до любых асинхронных операций)
+            const monobankWindow = window.open('https://send.monobank.ua/jar/3YKPCthpJk', '_blank');
             
-            // Перенаправляем в Monobank через 2 секунды
+            // Закрываем форму через 1 секунду
             setTimeout(() => {
-                window.open('https://send.monobank.ua/jar/3YKPCthpJk', '_blank');
                 closeOrderForm();
-            }, 2000);
+                loading.style.display = 'none';
+                submitButton.disabled = false;
+            }, 1000);
         });
 
         // Закрытие модального окна при клике вне его
