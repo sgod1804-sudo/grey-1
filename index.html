@@ -270,6 +270,28 @@
             margin-top: 15px;
             text-align: center;
         }
+
+        .payment-button {
+            width: 100%;
+            background: #27ae60;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .payment-button:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
         
         @media (max-width: 1200px) {
             .courses-grid {
@@ -414,11 +436,22 @@
                 </div>
                 
                 <button type="submit" class="submit-button" id="submitButton">
-                    Перейти к оплате
+                    Сохранить данные
                 </button>
                 
                 <div class="loading" id="loading">
-                    Перенаправляем к оплате...
+                    Сохраняем данные...
+                </div>
+
+                <div id="paymentSection" style="display: none;">
+                    <div class="success-message">
+                        ✅ Данные сохранены! Нажмите кнопку ниже для оплаты:
+                    </div>
+                    <a href="https://send.monobank.ua/jar/3YKPCthpJk" 
+                       target="_blank" 
+                       class="payment-button">
+                        💳 Перейти к оплате в Monobank
+                    </a>
                 </div>
             </form>
         </div>
@@ -440,7 +473,9 @@
             // Сброс формы
             document.getElementById('orderForm').reset();
             document.getElementById('loading').style.display = 'none';
+            document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('submitButton').disabled = false;
+            document.getElementById('submitButton').style.display = 'block';
             
             document.getElementById('orderModal').style.display = 'flex';
         }
@@ -455,10 +490,12 @@
             
             const submitButton = document.getElementById('submitButton');
             const loading = document.getElementById('loading');
+            const paymentSection = document.getElementById('paymentSection');
             
             // Показываем загрузку
             submitButton.disabled = true;
             loading.style.display = 'block';
+            paymentSection.style.display = 'none';
             
             // Собираем данные формы
             const formData = {
@@ -481,14 +518,11 @@
             console.log('Цена:', formData.price);
             console.log('Дата:', formData.timestamp);
             
-            // НЕМЕДЛЕННО открываем Monobank (до любых асинхронных операций)
-            const monobankWindow = window.open('https://send.monobank.ua/jar/3YKPCthpJk', '_blank');
-            
-            // Закрываем форму через 1 секунду
+            // Через 1 секунду показываем кнопку оплаты
             setTimeout(() => {
-                closeOrderForm();
                 loading.style.display = 'none';
-                submitButton.disabled = false;
+                paymentSection.style.display = 'block';
+                submitButton.style.display = 'none';
             }, 1000);
         });
 
