@@ -254,23 +254,6 @@
             color: #333;
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            color: #d4af37;
-            margin-top: 10px;
-        }
-
-        .success-message {
-            display: none;
-            background: #d4ffd4;
-            color: #2d5016;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            text-align: center;
-        }
-
         .payment-button {
             width: 100%;
             background: #27ae60;
@@ -291,6 +274,15 @@
         .payment-button:hover {
             background: #219a52;
             transform: translateY(-2px);
+        }
+
+        .success-message {
+            background: #d4ffd4;
+            color: #2d5016;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
         }
         
         @media (max-width: 1200px) {
@@ -438,16 +430,12 @@
                 <button type="submit" class="submit-button" id="submitButton">
                     Сохранить данные
                 </button>
-                
-                <div class="loading" id="loading">
-                    Сохраняем данные...
-                </div>
 
                 <div id="paymentSection" style="display: none;">
                     <div class="success-message">
-                        ✅ Данные сохранены! Нажмите кнопку ниже для оплаты:
+                        ✅ Данные сохранены! Нажмите для оплаты:
                     </div>
-                    <a href="https://send.monobank.ua/jar/3YKPCthpJk" 
+                    <a href="https://send.monobank.ua/jar/iAotyRB15" 
                        target="_blank" 
                        class="payment-button">
                         💳 Перейти к оплате в Monobank
@@ -472,7 +460,6 @@
             
             // Сброс формы
             document.getElementById('orderForm').reset();
-            document.getElementById('loading').style.display = 'none';
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('submitButton').disabled = false;
             document.getElementById('submitButton').style.display = 'block';
@@ -489,13 +476,7 @@
             e.preventDefault();
             
             const submitButton = document.getElementById('submitButton');
-            const loading = document.getElementById('loading');
             const paymentSection = document.getElementById('paymentSection');
-            
-            // Показываем загрузку
-            submitButton.disabled = true;
-            loading.style.display = 'block';
-            paymentSection.style.display = 'none';
             
             // Собираем данные формы
             const formData = {
@@ -518,12 +499,9 @@
             console.log('Цена:', formData.price);
             console.log('Дата:', formData.timestamp);
             
-            // Через 1 секунду показываем кнопку оплаты
-            setTimeout(() => {
-                loading.style.display = 'none';
-                paymentSection.style.display = 'block';
-                submitButton.style.display = 'none';
-            }, 1000);
+            // Сразу показываем кнопку оплаты
+            paymentSection.style.display = 'block';
+            submitButton.style.display = 'none';
         });
 
         // Закрытие модального окна при клике вне его
